@@ -1,0 +1,16 @@
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\bin\Debug\netcoreapp2.2\appsettings.Development.json
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\bin\Debug\netcoreapp2.2\appsettings.json
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\bin\Debug\netcoreapp2.2\Properties\launchSettings.json
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\bin\Debug\netcoreapp2.2\JwtSample.deps.json
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\bin\Debug\netcoreapp2.2\JwtSample.runtimeconfig.json
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\bin\Debug\netcoreapp2.2\JwtSample.runtimeconfig.dev.json
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\bin\Debug\netcoreapp2.2\JwtSample.dll
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\bin\Debug\netcoreapp2.2\JwtSample.pdb
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\obj\Debug\netcoreapp2.2\JwtSample.csprojAssemblyReference.cache
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\obj\Debug\netcoreapp2.2\JwtSample.RazorAssemblyInfo.cache
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\obj\Debug\netcoreapp2.2\JwtSample.RazorAssemblyInfo.cs
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\obj\Debug\netcoreapp2.2\JwtSample.AssemblyInfoInputs.cache
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\obj\Debug\netcoreapp2.2\JwtSample.AssemblyInfo.cs
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\obj\Debug\netcoreapp2.2\JwtSample.RazorTargetAssemblyInfo.cache
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\obj\Debug\netcoreapp2.2\JwtSample.dll
+E:\Sample Projects\Jwt Sample\JwtSample\JwtSample\obj\Debug\netcoreapp2.2\JwtSample.pdb
