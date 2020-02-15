@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29411.138
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlobDemo", "BlobDemo\BlobDemo.csproj", "{9EE47DFA-E510-431F-BBDC-298D041B85AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure.storage.Blob", "azure.storage.Blob\azure.storage.Blob.csproj", "{C0D8AAF8-9C22-423C-BC7A-862C52A932B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureStorage.Demo", "AzureStorage.Demo\AzureStorage.Demo.csproj", "{A230B801-C443-4807-A419-039B267D79AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9EE47DFA-E510-431F-BBDC-298D041B85AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9EE47DFA-E510-431F-BBDC-298D041B85AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9EE47DFA-E510-431F-BBDC-298D041B85AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9EE47DFA-E510-431F-BBDC-298D041B85AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0D8AAF8-9C22-423C-BC7A-862C52A932B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0D8AAF8-9C22-423C-BC7A-862C52A932B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0D8AAF8-9C22-423C-BC7A-862C52A932B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0D8AAF8-9C22-423C-BC7A-862C52A932B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A230B801-C443-4807-A419-039B267D79AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A230B801-C443-4807-A419-039B267D79AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A230B801-C443-4807-A419-039B267D79AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A230B801-C443-4807-A419-039B267D79AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
