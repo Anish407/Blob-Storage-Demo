@@ -80,5 +80,19 @@ namespace BlobDemo.Controllers
             }
 
         }
+
+        [HttpGet("GetMetaData/{name}")]
+        public async Task<IActionResult> GetMetaData(string name)
+        {
+            try
+            {
+                return Ok(await BlobOperations.GetBlobMetaData(name));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
     }
 }

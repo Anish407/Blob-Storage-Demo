@@ -14,7 +14,10 @@ namespace azure.storage.Blob
 {
     public class BlobOperations : IBlobOperations
     {
-
+        readonly string containerName = "videos";
+        //Assume that our blob has 2 properties(metadata with author and rating as keys)
+        readonly string keyName = "Author";
+        readonly string keyName2 = "rating";
         public BlobOperations(IConfiguration configuration, ILogger<BlobOperations> logger)
         {
             Configuration = configuration;
@@ -26,10 +29,58 @@ namespace azure.storage.Blob
 
         public async Task UploadToBlob(IFormFile asset)
         {
-            string containerName = "videos";
             CloudBlockBlob blockBlob = (await SetupContainer(containerName)).GetBlockBlobReference(asset.FileName);
             using var stream = asset.OpenReadStream();
             await blockBlob.UploadFromStreamAsync(stream); ;
+        }
+
+
+        /// <summary>
+        /// Add the meta data which is a keyalue pair to the blob and use SetMetadataAsync to save
+        /// </summary>
+        /// <param name="blobName">Blob to which the metadata is to be added</param>
+        /// <param name="keyName">Key for the metadata dictionary</param>
+        /// <param name="keyValue">Value to be saved</param>
+        /// <returns></returns>
+        public async Task CreateMetaData(string blobName, string keyName, string keyValue)
+        {
+            // update is also similar
+            var blockBlob = (await SetupContainer(containerName)).GetBlockBlobReference(blobName);
+            blockBlob.Metadata[keyName] = keyValue;
+            await blockBlob.SetMetadataAsync();
+        }
+
+        /// <summary>
+        /// Remove the metaData from the blob
+        /// </summary>
+        /// <param name="blobName"></param>
+        /// <param name="keyName"></param>
+        /// <returns></returns>
+        public async Task RemoveMetaData(string blobName, string keyName)
+        {
+            // update is also similar
+            var blockBlob = (await SetupContainer(containerName)).GetBlockBlobReference(blobName);
+            blockBlob.Metadata.Remove(keyName);
+            await blockBlob.SetMetadataAsync();
+        }
+
+        /// <summary>
+        /// Get MetaData by blob name.. Assume that we have 2 metadata that store Author and rating
+        /// </summary>
+        /// <param name="blobName"></param>
+        /// <returns></returns>
+        public async Task<(string rating, string author)> GetBlobMetaData(string blobName)
+        {
+            CloudBlockBlob blockBlob = (await SetupContainer(containerName)).GetBlockBlobReference(blobName);
+
+            return (GetMetaDataByBlobName(blockBlob,keyName),
+                    GetMetaDataByBlobName(blockBlob, keyName2));
+
+        }
+
+        private string GetMetaDataByBlobName(CloudBlockBlob blockBlob,string key)
+        {
+            return blockBlob.Metadata.ContainsKey(key) ? blockBlob.Metadata[key] : "no MetaData found";
         }
 
         private CloudBlobContainer GetContainerReference(string containerName)
@@ -74,7 +125,7 @@ namespace azure.storage.Blob
         public async Task<(Stream, string, string)> DownloadFile(string fileName)
         {
             CloudBlockBlob file = (await SetupContainer("videos")).GetBlockBlobReference(fileName);
-           
+
             if (!await file.ExistsAsync()) throw new Exception("file doesnt exist");
 
             //convert the file to a memory stream
@@ -92,11 +143,12 @@ namespace azure.storage.Blob
 
             BlobContinuationToken continuationToken = null;
             //use  blobListingDetails:BlobListingDetails.Deleted, to get soft deleted blobs
+            // use Pipe and list MetaData while fetching the blobs, along with the soft deleted blobs
             BlobResultSegment blobResultSegment1 = await blobContainer
                 .ListBlobsSegmentedAsync(
                  prefix: null,
                  useFlatBlobListing: true,
-                 blobListingDetails: BlobListingDetails.Deleted,
+                 blobListingDetails: BlobListingDetails.Deleted | BlobListingDetails.Metadata,
                  null,
                  currentToken: null,
                  null,
