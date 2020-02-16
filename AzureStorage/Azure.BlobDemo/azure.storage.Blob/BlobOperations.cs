@@ -27,7 +27,7 @@ namespace azure.storage.Blob
         public async Task UploadToBlob(IFormFile asset)
         {
             string containerName = "videos";
-            CloudBlockBlob blockBlob = GetContainerReference(containerName).GetBlockBlobReference(asset.FileName);
+            CloudBlockBlob blockBlob = (await SetupContainer(containerName)).GetBlockBlobReference(asset.FileName);
             using var stream = asset.OpenReadStream();
             await blockBlob.UploadFromStreamAsync(stream); ;
         }
@@ -40,9 +40,9 @@ namespace azure.storage.Blob
             return blobClient.GetContainerReference(containerName);
         }
 
-        static async Task ListAllBlobs()
+        public async Task<List<BlobModel>> ListAllBlobs()
         {
-            CloudBlobContainer blobContainer = await SetupContainer();
+            CloudBlobContainer blobContainer = await SetupContainer("videos");
             List<CloudBlockBlob> blobList = new List<CloudBlockBlob>();
 
             BlobContinuationToken continuationToken = null;
@@ -68,10 +68,24 @@ namespace azure.storage.Blob
                 blobList.AddRange(blobResultSegment.Results.OfType<CloudBlockBlob>());
             } while (continuationToken != null);
 
+            return blobList.Select(i => new BlobModel { ContainerName = i.Container.Name, Name = i.Name, Uri = i.Uri.AbsoluteUri }).ToList();
+        }
+
+        public async Task<(Stream, string, string)> DownloadFile(string fileName)
+        {
+            CloudBlockBlob file = (await SetupContainer("videos")).GetBlockBlobReference(fileName);
+           
+            if (!await file.ExistsAsync()) throw new Exception("file doesnt exist");
+
+            //convert the file to a memory stream
+            using var stream = new MemoryStream();
+            await file.DownloadToStreamAsync(stream);
+            Stream blobStream = await file.OpenReadAsync();
+            return (blobStream, file.Properties.ContentType, file.Name);
 
         }
 
-        static async Task<List<CloudBlockBlob>> DisplaySoftDeletedBlobs()
+        public async Task<List<CloudBlockBlob>> DisplaySoftDeletedBlobs()
         {
             CloudBlobContainer blobContainer = await SetupContainer();
             List<CloudBlockBlob> blobList = new List<CloudBlockBlob>();
@@ -92,11 +106,11 @@ namespace azure.storage.Blob
             return blobList;
         }
 
-        static async Task<bool> DeleteBlobAsync(string fileName = "")
+        public async Task<bool> DeleteBlobAsync(string fileName = "")
         {
             // Need to specify the extension also
             fileName ??= "tree-736885__340.jpg";
-            var container = await SetupContainer();
+            var container = await SetupContainer("videos");
             var blobFileToDelete = container.GetBlockBlobReference(fileName);
 
             return await blobFileToDelete.DeleteIfExistsAsync();
@@ -104,9 +118,9 @@ namespace azure.storage.Blob
 
         //Download blobs using sarath's code.. using SPA.
 
-        static async Task<CloudBlobContainer> SetupContainer()
+        private async Task<CloudBlobContainer> SetupContainer(string containerName = "images")
         {
-            string containerName = "images";
+            // string containerName = "images";
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=anishstoragedemo;AccountKey=KRohowEAfydP3O7KtPlXqlyoUPyPlJI5cp9dQ5cPpmkncnQpPNVDGszUH6p7FptXqn23D6/sRI1mKdtFwgX1qw==;EndpointSuffix=core.windows.net");
             CloudBlobClient cloudeBlobClient = storageAccount.CreateCloudBlobClient();
 

@@ -28,12 +28,15 @@ namespace AzureStorage.Demo
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(MyAllowSpecificOrigins,
+                options.AddPolicy("foo",
                 builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200/");
+                    // Not a permanent solution, but just trying to isolate the problem
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
+
+
             services.AddScoped<IBlobOperations, BlobOperations>();
             services.AddControllers();
         }
@@ -46,12 +49,15 @@ namespace AzureStorage.Demo
                 app.UseDeveloperExceptionPage();
             }
 
+           // app.UseCors(options => options.WithOrigins("http://example.com").AllowAnyMethod());
+
             app.UseHttpsRedirection();
-           
+
             app.UseRouting();
+            app.UseCors("foo");
 
             //app.UseAuthorization();
-            app.UseCors(MyAllowSpecificOrigins);
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

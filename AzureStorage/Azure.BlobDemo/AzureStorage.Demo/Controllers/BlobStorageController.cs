@@ -35,5 +35,50 @@ namespace BlobDemo.Controllers
             }
            
         }
+
+        [HttpGet("GetAllBlobs")]
+        public async Task<IActionResult> GetAllBlobs()
+        {
+            try
+            {
+                var result= await BlobOperations.ListAllBlobs();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpGet("DownloadBlob/{name}")]
+        public async Task<IActionResult> DownloadBlob(string name)
+        {
+            try
+            {
+                var result = await BlobOperations.DownloadFile(name);
+                return File(result.content,result.contentType,result.name);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpDelete("DeleteBlob/{name}")]
+        public async Task<IActionResult> DeleteBlob(string name)
+        {
+            try
+            {
+                var result = await BlobOperations.DeleteBlobAsync(name);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
     }
 }
