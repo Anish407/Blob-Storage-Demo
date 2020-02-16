@@ -78,6 +78,13 @@ namespace azure.storage.Blob
 
         }
 
+        /// <summary>
+        /// Implement optimistic concurency ETAGS and ACCESS CONDITIONS
+        /// </summary>
+        /// <param name="blockBlob"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+
         private string GetMetaDataByBlobName(CloudBlockBlob blockBlob,string key)
         {
             return blockBlob.Metadata.ContainsKey(key) ? blockBlob.Metadata[key] : "no MetaData found";
@@ -158,14 +165,25 @@ namespace azure.storage.Blob
             return blobList;
         }
 
+        /// <summary>
+        /// Delete blob.. Just like EF we can create an access condition specifying the ETAG, when the 
+        /// query evaulates, it checks the ETAG value and throws an exception if someone else
+        /// has modified the blob while we were trying to delete it
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public async Task<bool> DeleteBlobAsync(string fileName = "")
         {
             // Need to specify the extension also
             fileName ??= "tree-736885__340.jpg";
             var container = await SetupContainer("videos");
             var blobFileToDelete = container.GetBlockBlobReference(fileName);
+            AccessCondition accessCondition = new AccessCondition
+            {
+                IfMatchETag=blobFileToDelete.Properties.ETag
+            };
 
-            return await blobFileToDelete.DeleteIfExistsAsync();
+            return await blobFileToDelete.DeleteIfExistsAsync(DeleteSnapshotsOption.None,accessCondition,null,null);
         }
 
         //Download blobs using sarath's code.. using SPA.
